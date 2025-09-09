@@ -1,4 +1,5 @@
 import {prisma} from '@/libs/prisma'
+import { Suspense } from 'react';
 import { TaskLi1 } from '@/app/tasks/components/TaskLi1.jsx'
 import { TaskLi2 } from '@/app/tasks/components/TaskLi2.jsx'
 
@@ -14,9 +15,9 @@ async function fetchTasks(){
 
 //* Metodo 2 - obtener tasks de la BD
 async function fetchTasksFromBD(){
-  const tasks = await prisma.task.findMany()
 
-  return tasks
+
+  return await prisma.task.findMany()
 }
 
 
@@ -33,7 +34,10 @@ export default async function Home() {
       <hr />
       <hr />
       <hr />
-      <TaskLi2 tasksDataFromDB={tasksDataFromDB}/>
+      <h1>Metodo 2 Para obtener la data</h1>
+      <Suspense fallback={<div>Cargando mas</div>}>
+        <TaskLi2 tasksDataFromDB={tasksDataFromDB}/>
+      </Suspense>
     </div>
   );
 }
