@@ -1,13 +1,42 @@
 import { NextResponse } from "next/server";
+import {prisma} from '@/libs/prisma'
 
-export function GET(request, {params}){
-    return NextResponse.json("Obteniendo tarea " + params.id)
+//? GET
+export async function GET(request, {params}){
+    //* Obtener datos de la BD
+    const taskData = await prisma.task.findUnique({
+        where: {
+            id: Number(params.id)
+        }
+    })
+
+    return NextResponse.json(taskData)
 }
 
-export function PUT(request, {params}){
-    return NextResponse.json("Actualizando tarea " + params.id)
+//? Actualizar
+export async function PUT(request, {params}){
+    const data = await request.json()
+    const taskUpdated = await prisma.task.update({
+        where: {
+            id: Number(params.id)
+        },
+        data: data
+    })
+
+    return NextResponse.json(taskUpdated)
 }
 
-export function DELETE(request, {params}){
-    return NextResponse.json("Borrando tarea " + params.id)
+//? Delete
+export async function DELETE(request, {params}){
+    try {
+        const taskDeleted = await prisma.task.delete({
+            where: {
+                id: Number(params.id)
+            }
+        })
+    
+        return NextResponse.json("Borrando tarea " + params.id)
+    } catch (error) {
+        return NextResponse.json(error.message)
+    }
 }

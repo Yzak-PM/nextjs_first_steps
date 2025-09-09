@@ -1,4 +1,5 @@
 import "./globals.css";
+import Navbar from '@/components/Navbar.jsx'
 
 export const metadata = {
   title: "CRUD APP",
@@ -9,6 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <Navbar/>
         {children}
       </body>
     </html>

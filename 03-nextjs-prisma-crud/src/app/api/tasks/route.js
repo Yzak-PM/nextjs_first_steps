@@ -2,12 +2,23 @@ import { NextResponse } from "next/server";
 import {prisma} from '@/libs/prisma'
 
 export async function GET(){
+    //* Obtener todos los datos de la tabla
     const tasks = await prisma.task.findMany()
-    console.log(tasks)
 
-    return NextResponse.json("Obtener tareas")
+    return NextResponse.json(tasks)
 }
 
-export function POST(){
-    return NextResponse.json("Crear tareas")
+export async function POST(request){
+    //* Crear nuevo dato e insertar en la BD
+    // const new_task_data = await request.json()
+    const {title, description} = await request.json()
+
+    const new_task = await prisma.task.create({
+        data: {
+            title: title,
+            description: description
+        }
+    })
+
+    return NextResponse.json(new_task)
 }
